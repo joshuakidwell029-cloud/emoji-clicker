@@ -3,20 +3,309 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Emoji Clicker</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Emoji Clicker - The Ultimate Clicking Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #game-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 1000px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #764ba2;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        h3 {
+            color: #667eea;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .main-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        #emoji {
+            font-size: 150px;
+            cursor: pointer;
+            user-select: none;
+            display: inline-block;
+            transition: transform 0.1s, filter 0.1s;
+            filter: drop-shadow(0 10px 20px rgba(102, 126, 234, 0.4));
+            animation: emoji-glow 2s ease-in-out infinite;
+        }
+
+        #emoji:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 15px 30px rgba(102, 126, 234, 0.6));
+        }
+
+        #emoji:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes emoji-glow {
+            0%, 100% { filter: drop-shadow(0 10px 20px rgba(102, 126, 234, 0.4)); }
+            50% { filter: drop-shadow(0 15px 30px rgba(118, 75, 162, 0.6)); }
+        }
+
+        @keyframes float {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(0.5);
+            }
+        }
+
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            font-weight: bold;
+            color: #667eea;
+            font-size: 20px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        .upgrades-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        button:active:not(:disabled) {
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #prestige-button {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            padding: 20px 40px;
+            font-size: 18px;
+            margin: 20px auto;
+            display: block;
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.3);
+        }
+
+        #prestige-button:hover:not(:disabled) {
+            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.5);
+        }
+
+        .achievement-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ffd89b, #19547b);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 0.9em;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+            cursor: help;
+        }
+
+        #achievements {
+            margin: 30px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255, 216, 155, 0.2), rgba(25, 84, 123, 0.2));
+            border-radius: 15px;
+            min-height: 50px;
+        }
+
+        .achievement-notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(135deg, #ffd89b, #19547b);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: notif-pop 0.5s ease-out, notif-fade 0.5s ease-in 2.5s forwards;
+            z-index: 1000;
+        }
+
+        @keyframes notif-pop {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes notif-fade {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            #emoji {
+                font-size: 100px;
+            }
+
+            #game-container {
+                padding: 20px;
+            }
+
+            .upgrades-section {
+                grid-template-columns: 1fr;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
     <div id="game-container">
-        <h1>Emoji Clicker</h1>
-        <div id="emoji" onclick="handleClick()">😀</div>
-        <div id="score">Score: 0</div>
-        <div id="combo">Combo: x1</div>
-        <div id="multiplier">Multiplier: x1</div>
-        <div id="prestige-system">Prestige: 0</div>
-        <button id="prestige-button" onclick="prestige()">Prestige</button>
-        <div id="achievements"></div>
+        <h1>🎮 Emoji Clicker</h1>
+        
+        <div class="main-section">
+            <div id="emoji" onclick="handleClick()">😀</div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-label">Total Clicks</div>
+                <div class="stat-value" id="score">0</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Combo Multiplier</div>
+                <div class="stat-value" id="combo">x1</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Click Multiplier</div>
+                <div class="stat-value" id="multiplier">x1</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-label">Auto Clicks/sec</div>
+                <div class="stat-value" id="cps">0</div>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-label">Prestige Level</div>
+                <div class="stat-value" id="prestige-system">0</div>
+            </div>
+        </div>
+
+        <h2>💥 Click Upgrades</h2>
+        <div class="upgrades-section" id="click-upgrades"></div>
+
+        <h2>🤖 Auto-Clicker Upgrades</h2>
+        <div class="upgrades-section" id="auto-upgrades"></div>
+
+        <h2>📈 Multiplier Upgrades</h2>
+        <div class="upgrades-section" id="mult-upgrades"></div>
+
+        <button id="prestige-button" onclick="prestige()">✨ PRESTIGE</button>
+
+        <div id="achievements">
+            <h3>🏆 Achievements</h3>
+        </div>
     </div>
+
     <script src="scripts.js"></script>
 </body>
 </html>
