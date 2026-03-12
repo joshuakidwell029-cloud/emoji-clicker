@@ -1,0 +1,48 @@
+.emoji-button {
+    background: linear-gradient(135deg, #f0f0f0, #c4c4c4);
+    border: none;
+    border-radius: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.emoji-button:hover {
+    background: linear-gradient(135deg, #e0e0e0, #b0b0b0);
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.emoji {
+    font-size: 50px;
+    animation: pulse 0.6s infinite;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    margin: 20px;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+@media (max-width: 600px) {
+    .emoji-button {
+        width: 100%;
+        padding: 15px;
+    }
+    .card {
+        width: 90%;
+    }
+}
